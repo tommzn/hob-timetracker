@@ -48,6 +48,14 @@ type ExcelReportFormatter struct {
 	// HolidayStyleId, style to format holidays in outout. Overwrites weekend format.
 	// Light green background
 	holidayStyleId int
+
+	// IllnessStyleId, style for days of illness.
+	// Orange background
+	illnessStyleId int
+
+	// VacationStyleId, style for days of vacations.
+	// Green background
+	vacationStyleId int
 }
 
 // WithHolidays will assign give list of holidays for output formatting.
@@ -151,6 +159,20 @@ func (formatter *ExcelReportFormatter) createStyles(xls *excelize.File) error {
 	formatter.holidayStyleId, err = xls.NewStyle(&excelize.Style{
 		Fill: excelize.Fill{Type: "pattern", Color: []string{"#FED7DE"}, Pattern: 1},
 	})
+	if err != nil {
+		return err
+	}
+
+	formatter.illnessStyleId, err = xls.NewStyle(&excelize.Style{
+		Fill: excelize.Fill{Type: "pattern", Color: []string{"#ff6600"}, Pattern: 1},
+	})
+	if err != nil {
+		return err
+	}
+
+	formatter.vacationStyleId, err = xls.NewStyle(&excelize.Style{
+		Fill: excelize.Fill{Type: "pattern", Color: []string{"#669900"}, Pattern: 1},
+	})
 	return err
 }
 
@@ -199,6 +221,16 @@ func (formatter *ExcelReportFormatter) appendRowForDay(day Day, xls *excelize.Fi
 	}
 	xls.SetCellValue(sheetName, getCellId("D", row), formatDuration(day.WorkingTime))
 	xls.SetCellValue(sheetName, getCellId("E", row), formatDuration(day.BreakTime))
+
+	if day.Type == VACATION {
+		xls.SetCellStyle(sheetName, getCellId("A", row), getCellId("F", row), formatter.vacationStyleId)
+		xls.SetCellValue(sheetName, getCellId("F", row), "Vacation")
+	}
+
+	if day.Type == ILLNESS {
+		xls.SetCellStyle(sheetName, getCellId("A", row), getCellId("F", row), formatter.illnessStyleId)
+		xls.SetCellValue(sheetName, getCellId("F", row), "Illness")
+	}
 
 	if isWeekend(day.Date.AsTime()) {
 		xls.SetCellStyle(sheetName, getCellId("A", row), getCellId("F", row), formatter.weekendStyleId)

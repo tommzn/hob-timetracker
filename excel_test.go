@@ -49,6 +49,27 @@ func monthlyReportForTest() *MonthlyReport {
 					TimeTrackingRecord{Type: WORKDAY, Timestamp: asTime("2022-01-01T16:30:00")},
 				},
 			},
+			Day{
+				Date:        Date{Year: 2022, Month: 1, Day: 10},
+				Type:        ILLNESS,
+				WorkingTime: 8 * time.Hour,
+				BreakTime:   30 * time.Minute,
+				Events:      []TimeTrackingRecord{},
+			},
+			Day{
+				Date:        Date{Year: 2022, Month: 1, Day: 11},
+				Type:        VACATION,
+				WorkingTime: 8 * time.Hour,
+				BreakTime:   30 * time.Minute,
+				Events:      []TimeTrackingRecord{},
+			},
+			Day{
+				Date:        Date{Year: 2022, Month: 1, Day: 12},
+				Type:        VACATION,
+				WorkingTime: 8 * time.Hour,
+				BreakTime:   30 * time.Minute,
+				Events:      []TimeTrackingRecord{},
+			},
 		},
 		TotalWorkingTime: 8 * time.Hour,
 	}

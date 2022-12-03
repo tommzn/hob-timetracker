@@ -1,5 +1,13 @@
 # HomeOffice Button - TimeTracker
-HomeOffice time tracker using AWS IOT 1-Click button.
+Use a AWS IOT 1-Click button to track working time, illness or vacation.
+
+# 1-Click Actions
+A AWS IOT 1-Click button usually support tree types of click. Each click type will capture a different time tracking record.
+|| Click Type || Description ||
+|-------------|---------------|
+| Single Click | Captures time tracking record for working day. |
+| Double Click | Use double click to capture illness. |
+| Long Press | This click type is used to capture start of vacation. |
 
 # Report Generator
 Report generator creates a montly summary with working hours per day.
