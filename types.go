@@ -94,9 +94,6 @@ type Locale struct {
 	// ISO 3166-1 country code.
 	Country string
 
-	// ISO 3166-2 region code.
-	Region *string
-
 	// Timezone, used to format time in reports.
 	Timezone *string
 
@@ -108,4 +105,14 @@ type Locale struct {
 
 	// Breaks is a map of working durations and breaks which have to be applied for this time.
 	Breaks map[time.Duration]time.Duration
+}
+
+// Holiday is a single, public holiday.
+type Holiday struct {
+
+	// Date of this day.
+	Date
+
+	// Description of a public holiday.
+	Description string
 }

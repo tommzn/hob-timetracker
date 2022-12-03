@@ -42,3 +42,10 @@ type ReportPublisher interface {
 	// Send publishes given report data to a target.
 	Send([]byte, string) error
 }
+
+// Calendar is used to get holidays or non-working days.
+type Calendar interface {
+
+	// GetHolidays returns a list of holiday for given year and month.
+	GetHolidays(int, int) ([]Holiday, error)
+}

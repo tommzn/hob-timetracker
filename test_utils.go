@@ -24,7 +24,6 @@ func deviceIdForTest() string {
 func localeForTest() Locale {
 	return Locale{
 		Country:    "de",
-		Region:     asStringPointer("de-by"),
 		Timezone:   asStringPointer("Europe/Berlin"),
 		DateFormat: asStringPointer("02.01.2006"),
 		Breaks: map[time.Duration]time.Duration{

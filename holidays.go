@@ -18,9 +18,9 @@ type CalendarApi struct {
 }
 
 // GetHolidays try to fetch holidays for given month.
-func (api *CalendarApi) GetHolidays(year, month int) (map[Date]string, error) {
+func (api *CalendarApi) GetHolidays(year, month int) ([]Holiday, error) {
 
-	listOfHolidays := make(map[Date]string)
+	listOfHolidays := []Holiday{}
 	calParams := calendarific.CalParameters{
 		ApiKey:  api.apiKey,
 		Country: api.location.Country,
@@ -33,9 +33,14 @@ func (api *CalendarApi) GetHolidays(year, month int) (map[Date]string, error) {
 		return listOfHolidays, err
 	}
 	for _, holiday := range res.Response.Holidays {
-		date := Date{holiday.Date.Datetime.Year, holiday.Date.Datetime.Month, holiday.Date.Datetime.Day}
 		if isHoliday(holiday.Type) {
-			listOfHolidays[date] = holiday.Name
+			listOfHolidays = append(listOfHolidays, Holiday{
+				Date: Date{
+					Year:  holiday.Date.Datetime.Year,
+					Month: holiday.Date.Datetime.Month,
+					Day:   holiday.Date.Datetime.Day},
+				Description: holiday.Name,
+			})
 		}
 	}
 	return listOfHolidays, nil

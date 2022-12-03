@@ -22,7 +22,7 @@ type ExcelReportFormatter struct {
 	// Holidays is a list of public holidays.
 	// In case a day matches a date from this list it will be formatted with a specific backgound color.
 	// see holidayStyleId for format infos.
-	holidays map[Date]string
+	holidays map[Date]Holiday
 
 	// dateFormat defnines the format a day should be printed in the outut.
 	dateFormat string
@@ -51,8 +51,8 @@ type ExcelReportFormatter struct {
 }
 
 // WithHolidays will assign give list of holidays for output formatting.
-func (formatter *ExcelReportFormatter) WithHolidays(holidays map[Date]string) {
-	formatter.holidays = holidays
+func (formatter *ExcelReportFormatter) WithHolidays(holidays []Holiday) {
+	formatter.holidays = asHolidayMap(holidays)
 }
 
 // WriteMonthlyReportToFile will generate a report outout an writes it to given file.
@@ -203,9 +203,9 @@ func (formatter *ExcelReportFormatter) appendRowForDay(day Day, xls *excelize.Fi
 	if isWeekend(day.Date.AsTime()) {
 		xls.SetCellStyle(sheetName, getCellId("A", row), getCellId("F", row), formatter.weekendStyleId)
 	}
-	if description, ok := formatter.holidays[day.Date]; ok {
+	if holiday, ok := formatter.holidays[day.Date]; ok {
 		xls.SetCellStyle(sheetName, getCellId("A", row), getCellId("F", row), formatter.holidayStyleId)
-		xls.SetCellValue(sheetName, getCellId("F", row), description)
+		xls.SetCellValue(sheetName, getCellId("F", row), holiday.Description)
 	}
 }
 
@@ -273,4 +273,13 @@ func emptyDay(date Date) Day {
 		BreakTime:   time.Duration(0),
 		Events:      []TimeTrackingRecord{},
 	}
+}
+
+// AsHolidayMap generates a map with date index for passed lost pf holidays.
+func asHolidayMap(holidays []Holiday) map[Date]Holiday {
+	holidayMap := make(map[Date]Holiday)
+	for _, holiday := range holidays {
+		holidayMap[holiday.Date] = holiday
+	}
+	return holidayMap
 }
