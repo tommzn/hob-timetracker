@@ -29,6 +29,9 @@ type ReportCalculator interface {
 // ReportFormatter generates an output for passed reports.
 type ReportFormatter interface {
 
+	// WithHolidays will assign give list of holidays for output formatting.
+	WithHolidays(holidays []Holiday)
+
 	// WriteMonthlyReportToFile will generate a report outout an writes it to given file.
 	WriteMonthlyReportToFile(*MonthlyReport, string) error
 
