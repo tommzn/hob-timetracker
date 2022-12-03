@@ -1,3 +1,9 @@
+[![Go Reference](https://pkg.go.dev/badge/github.com/tommzn/hob-timetracker.svg)](https://pkg.go.dev/github.com/tommzn/hob-timetracker)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/tommzn/hob-timetracker)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/tommzn/hob-timetracker)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tommzn/hob-timetracker)](https://goreportcard.com/report/github.com/tommzn/hob-timetracker)
+[![Actions Status](https://github.com/tommzn/hob-timetracker/actions/workflows/go.pkg.auto-ci.yml/badge.svg)](https://github.com/tommzn/hob-timetracker/actions)
+
 # HomeOffice Button - TimeTracker
 Use a AWS IOT 1-Click button to track working time, illness or vacation in your home office and generate monthly reports.  
 
