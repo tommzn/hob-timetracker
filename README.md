@@ -6,6 +6,7 @@
 
 # HomeOffice Button - TimeTracker
 Use a AWS IOT 1-Click button to track working time, illness or vacation in your home office and generate monthly reports.  
+![IOT Time Tracking Architecture](docs/IOT Time Tracking Architecture.png)
 
 # AWS IOT 1-Click Button
 This project uses a [Seeed IoT button for AWS IoT 1-Click](https://aws.amazon.com/iot-1-click/devices/#Seeed_IoT_button_for_AWS) to capture time tracking events, e.g. start/end of work or illness and vacation.
