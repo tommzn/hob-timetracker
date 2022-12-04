@@ -154,7 +154,7 @@ func splitTimeTrackingRecords(records []TimeTrackingRecord, chunkSize int) (chun
 	return append(chunks, records)
 }
 
-// FillVacationAndIllness will add vacation and ilness days.
+// FillVacationAndIllness will add vacation and illness days.
 // Thhis applies if a day with type ILLNESS or VACATION is available and following days doesn't exist in the list of days.
 // For such cases days with same type will be generated until next day in the list or until the end of the month.
 func fillVacationAndIllness(report *MonthlyReport, latestType RecordType) {

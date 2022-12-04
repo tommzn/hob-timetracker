@@ -10,7 +10,7 @@ const (
 	// WORKDAY is used to track start and end of a usual workday.
 	WORKDAY RecordType = "workday"
 
-	// ILLNESSS is used to track sick leave.
+	// ILLNESS is used to track sick leave.
 	ILLNESS RecordType = "illness"
 
 	// VACATION to track holiday absence.
@@ -48,7 +48,7 @@ type TimeTrackingRecord struct {
 	// Type of a time tracking event.
 	Type RecordType
 
-	// Timestamp is the point in time a time tracking event has occured.
+	// Timestamp is the point in time a time tracking event has occurred.
 	Timestamp time.Time
 
 	// Estimated time tracking report a used to fill missing events. e.g. workday end if it not has been captured.
@@ -69,7 +69,7 @@ type Date struct {
 }
 
 // Day is a single day of working, illness or vacations.
-// It contains all time tracking events occured for this date and calculated working/break time based on this events.
+// It contains all time tracking events occurred for this date and calculated working/break time based on this events.
 type Day struct {
 
 	// Date of this day.
