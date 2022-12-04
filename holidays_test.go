@@ -15,7 +15,15 @@ func TestHolidaysTestSuite(t *testing.T) {
 	suite.Run(t, new(HolidaysTestSuite))
 }
 
+func (suite *HolidaysTestSuite) skipCI() {
+	if _, isSet := os.LookupEnv("CI"); isSet {
+		suite.T().Skip("Skip test in CI environment.")
+	}
+}
+
 func (suite *HolidaysTestSuite) TestGetHolidays() {
+
+	suite.skipCI()
 
 	api, ok := holidayApiForTest()
 	suite.True(ok)

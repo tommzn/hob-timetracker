@@ -1,6 +1,7 @@
 package timetracker
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -17,20 +18,25 @@ func TestExcelReportFormatterTestSuitee(t *testing.T) {
 
 func (suite *ExcelReportFormatterTestSuite) TestGenerateReport() {
 
-	formater := NewExcelReportFormatter()
+	formatter := NewExcelReportFormatter()
 	report := monthlyReportForTest()
 
-	api, ok := holidayApiForTest()
-	suite.True(ok)
+	suite.withHolidays(formatter, report.Year, report.Month)
 
-	holidays, err := api.GetHolidays(report.Year, report.Month)
-	suite.Nil(err)
-	formater.WithHolidays(holidays)
-
-	suite.Nil(formater.WriteMonthlyReportToFile(report, "report.xlsx"))
-	buf, err := formater.WriteMonthlyReportToBuffer(report)
+	suite.Nil(formatter.WriteMonthlyReportToFile(report, "report.xlsx"))
+	buf, err := formatter.WriteMonthlyReportToBuffer(report)
 	suite.Nil(err)
 	suite.True(len(buf.Bytes()) > 0)
+}
+
+func (suite *ExcelReportFormatterTestSuite) withHolidays(formatter ReportFormatter, year, month int) {
+	if _, isSet := os.LookupEnv("CI"); !isSet {
+		api, ok := holidayApiForTest()
+		suite.True(ok)
+		holidays, err := api.GetHolidays(year, month)
+		suite.Nil(err)
+		formatter.WithHolidays(holidays)
+	}
 }
 
 func monthlyReportForTest() *MonthlyReport {
