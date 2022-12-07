@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+
+	utils "github.com/tommzn/go-utils"
 )
 
 // NewS3Publisher returns a new publisher to upload reports to AWS S3.
@@ -60,9 +62,10 @@ func (repo *S3Repository) Captured(deviceId string, recordType RecordType, times
 
 	timeTrackingRecord := TimeTrackingRecord{Type: recordType, Timestamp: timestamp.UTC()}
 	content, _ := json.Marshal(timeTrackingRecord)
+	objectPath := repo.newS3ObjectPath(deviceId, timeTrackingRecord.Timestamp)
 	uploadInput := &s3manager.UploadInput{
 		Bucket: repo.bucket,
-		Key:    repo.newS3ObjectPath(deviceId, timeTrackingRecord.Timestamp),
+		Key:    aws.String(*objectPath + repo.newRecordId()),
 		Body:   bytes.NewReader(content),
 	}
 	_, uploadErr := repo.uploader.Upload(uploadInput)
@@ -124,6 +127,11 @@ func (repo *S3Repository) newS3ObjectPath(deviceId string, t time.Time) *string 
 		path = *repo.basePath + path
 	}
 	return &path
+}
+
+// NewRecordId generates a new UUID v4.
+func (repo *S3Repository) newRecordId() string {
+	return utils.NewId()
 }
 
 // Send will upload given report data to AWS S3.
