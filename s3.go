@@ -60,7 +60,7 @@ func (repo *S3Repository) Capture(deviceId string, recordType RecordType) error 
 // Captured creates a time tracking record for passed point in time.
 func (repo *S3Repository) Captured(deviceId string, recordType RecordType, timestamp time.Time) error {
 
-	timeTrackingRecord := TimeTrackingRecord{Type: recordType, Timestamp: timestamp.UTC()}
+	timeTrackingRecord := TimeTrackingRecord{DeviceId: deviceId, Type: recordType, Timestamp: timestamp.UTC()}
 	content, _ := json.Marshal(timeTrackingRecord)
 	objectPath := repo.newS3ObjectPath(deviceId, timeTrackingRecord.Timestamp)
 	uploadInput := &s3manager.UploadInput{
