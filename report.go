@@ -23,6 +23,11 @@ type ReportCalulator struct {
 	records []TimeTrackingRecord
 }
 
+// WithTimeTrackingRecords will apply given records for calculation.
+func (calculator *ReportCalulator) WithTimeTrackingRecords(records []TimeTrackingRecord) {
+	calculator.records = records
+}
+
 // MonthlyReport generates a report for given year and month from existing time tracking records.
 func (calculator *ReportCalulator) MonthlyReport(year, month int, latestType RecordType) (*MonthlyReport, error) {
 

@@ -22,6 +22,9 @@ type TimeTracker interface {
 // ReportCalculator creates a time tracking summary based on captured records.
 type ReportCalculator interface {
 
+	// WithTimeTrackingRecords applies a list of reords for report calculation.
+	WithTimeTrackingRecords([]TimeTrackingRecord)
+
 	// MonthlyReport calculates a report for given year and month.
 	MonthlyReport(int, int, RecordType) (*MonthlyReport, error)
 }
