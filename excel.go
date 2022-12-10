@@ -58,6 +58,11 @@ type ExcelReportFormatter struct {
 	vacationStyleId int
 }
 
+// FileExtension reurns file extension for Exce files: xlsx.
+func (formatter *ExcelReportFormatter) FileExtension() string {
+	return ".xlsx"
+}
+
 // WithHolidays will assign give list of holidays for output formatting.
 func (formatter *ExcelReportFormatter) WithHolidays(holidays []Holiday) {
 	formatter.holidays = asHolidayMap(holidays)

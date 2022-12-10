@@ -40,6 +40,9 @@ type ReportFormatter interface {
 
 	// WriteMonthlyReportToBuffer returns a buffer for gemerated report output.
 	WriteMonthlyReportToBuffer(*MonthlyReport) (*bytes.Buffer, error)
+
+	// FileExtension returns an extenstion for a report file.
+	FileExtension() string
 }
 
 // ReportPublisher sends given report to a defined target.

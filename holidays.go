@@ -7,7 +7,7 @@ import (
 )
 
 // newCalendarApi returns a new api to get holidays.
-func newCalendarApi(apiKey string, location Locale) *CalendarApi {
+func NewCalendarApi(apiKey string, location Locale) *CalendarApi {
 	return &CalendarApi{apiKey: apiKey, location: location}
 }
 

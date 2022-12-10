@@ -35,5 +35,5 @@ func (suite *HolidaysTestSuite) TestGetHolidays() {
 
 func holidayApiForTest() (*CalendarApi, bool) {
 	apiKey, ok := os.LookupEnv("HOLIDAYS_API_KEY")
-	return newCalendarApi(apiKey, localeForTest()), ok
+	return NewCalendarApi(apiKey, localeForTest()), ok
 }
