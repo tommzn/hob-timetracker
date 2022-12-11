@@ -45,6 +45,7 @@ func (calculator *ReportCalulator) MonthlyReport(year, month int, latestType Rec
 			day.Type = calculator.determineTypeOf(day.Events)
 			calculator.calculateWorkTimeForDay(&day)
 			calculator.subtractBreaks(&day)
+			report.TotalWorkingTime += day.WorkingTime
 			report.Days = append(report.Days, day)
 		}
 	}
