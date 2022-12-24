@@ -11,16 +11,18 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 
+	log "github.com/tommzn/go-log"
 	utils "github.com/tommzn/go-utils"
 )
 
 // NewS3Publisher returns a new publisher to upload reports to AWS S3.
-func NewS3Publisher(awsRegion, bucket, basePath *string) *S3Publisher {
+func NewS3Publisher(awsRegion, bucket, basePath *string, logger log.Logger) *S3Publisher {
 	return &S3Publisher{
 		bucket:   bucket,
 		basePath: basePath,
 		s3:       newS3Client(awsRegion),
 		uploader: newS3Uploader(awsRegion),
+		logger:   logger,
 	}
 }
 
@@ -41,6 +43,7 @@ type S3Publisher struct {
 	basePath *string
 	s3       *s3.S3
 	uploader *s3manager.Uploader
+	logger   log.Logger
 }
 
 // S3Repository uses AWS S3 bucket to persist time tracking records.
@@ -141,8 +144,12 @@ func (publisher *S3Publisher) Send(data []byte, name string) error {
 		Key:    publisher.objectKey(name),
 		Body:   bytes.NewReader(data),
 	}
-	_, uploadErr := publisher.uploader.Upload(uploadInput)
-	return uploadErr
+	if _, uploadErr := publisher.uploader.Upload(uploadInput); uploadErr != nil {
+		publisher.logger.Error("Unable to upload file to S3, reason: ", uploadErr)
+		return uploadErr
+	}
+	publisher.logger.Debugf("Successfully uploaded to S3 at %s/%s", *uploadInput.Bucket, *uploadInput.Key)
+	return nil
 }
 
 // ObjectKey creates a S3 object key for given report name,

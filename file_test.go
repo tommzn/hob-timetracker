@@ -18,7 +18,7 @@ func TestFilePublisherTestSuite(t *testing.T) {
 
 func (suite *FilePublisherTestSuite) TestSend() {
 
-	publisher := NewFilePublisher(nil)
+	publisher := NewFilePublisher(nil, loggerForTest())
 	fileName := "test.file"
 	suite.Nil(publisher.Send([]byte("test"), fileName))
 	_, err := os.Stat(fileName)

@@ -68,5 +68,5 @@ func (suite *S3TestSuite) s3PublisherForTest() *S3Publisher {
 	bucket, ok := os.LookupEnv("AWS_S3_TEST_BUCKET")
 	suite.True(ok)
 	path := "timetracker-reports-test"
-	return NewS3Publisher(nil, &bucket, &path)
+	return NewS3Publisher(nil, &bucket, &path, loggerForTest())
 }
