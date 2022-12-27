@@ -60,6 +60,9 @@ This formatter generates monthly report as an Excel file.
 ### S3 Publisher
 This publisher uploads a generated report output to a S3 bucket.
 
+### File Publisher
+Simply writes a report to a given local file.
+
 ## Calendar
 A calendar uses an external service to fetch public holidays.
 
