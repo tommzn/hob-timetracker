@@ -74,7 +74,7 @@ In a locale you can define some settings e.g. country for holidays, time zone or
 Following repoditories are using this time tracker package and contain AWS Lambda functions to capture click events and generate reports.
 | **Repository** | **Description**                                |
 |----------------|------------------------------------------------|
-| [hob-cpre](https://github.com/tommzn/hob-cpre) | Contains core components for this project, e.g. event definitions and helper to serialize/deserialize events. |
+| [hob-core](https://github.com/tommzn/hob-core) | Contains core components for this project, e.g. event definitions and helper to serialize/deserialize events. |
 | [hob-iot-handler](https://github.com/tommzn/hob-iot-handler) | Handler to process events from AWS IOT 1-Click. |
 | [hob-apigw-handler](https://github.com/tommzn/hob-apigw-handler) | Handler for capture request send to AWs API Gateway. |
 | [hob-report-generator](https://github.com/tommzn/hob-report-generator) | Kambda function to generate and send monthly reports. |
