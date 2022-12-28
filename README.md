@@ -63,6 +63,9 @@ This publisher uploads a generated report output to a S3 bucket.
 ### File Publisher
 Simply writes a report to a given local file.
 
+### eMail Publisher
+Uses AWS SES to send an email with generated report attached.
+
 ## Calendar
 A calendar uses an external service to fetch public holidays.
 

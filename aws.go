@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/service/ses"
 )
 
 // NewAWSConfig create a new config for AWS with passed region.
@@ -41,4 +42,9 @@ func newS3Client(awsRegion *string) *s3.S3 {
 // NewAwsSession creates a new session for AWS connections.
 func newAwsSession(awsRegion *string) *session.Session {
 	return session.Must(session.NewSession(newAWSConfig(awsRegion)))
+}
+
+// newSESClient creates a new cloent to send emails via AWS Simple Mail Service.
+func newSESClient(awsRegion *string) *ses.SES {
+	return ses.New(newAwsSession(awsRegion))
 }
