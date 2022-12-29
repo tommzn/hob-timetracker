@@ -42,6 +42,9 @@ type MonthlyReport struct {
 // TimeTrackingReport os a single captured time tracking event.
 type TimeTrackingRecord struct {
 
+	// Key is an unique identifier of a time tracking record.
+	Key string
+
 	// DeviceId is an identifier of a device which captures a time tracking record.
 	DeviceId string
 

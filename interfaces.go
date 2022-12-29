@@ -19,6 +19,17 @@ type TimeTracker interface {
 	ListRecords(string, time.Time, time.Time) ([]TimeTrackingRecord, error)
 }
 
+// TimeTrackingRecordManager is used to create, update or delete single time tracking records.
+type TimeTrackingRecordManager interface {
+
+	// Add creates a new time tracking record with given values. Same time tacking record will be
+	// returned together with a generated key.
+	Add(TimeTrackingRecord) (TimeTrackingRecord, error)
+
+	// Delete will remove time tracking record by passed key.
+	Delete(string) error
+}
+
 // ReportCalculator creates a time tracking summary based on captured records.
 type ReportCalculator interface {
 

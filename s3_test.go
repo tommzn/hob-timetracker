@@ -49,6 +49,25 @@ func (suite *S3TestSuite) TestListRecords() {
 	suite.Len(records1, 0)
 }
 
+func (suite *S3TestSuite) TestRecordCrudActions() {
+
+	suite.skipCI()
+
+	repo := suite.s3RepoForTest()
+
+	record := TimeTrackingRecord{
+		DeviceId:  "Device01",
+		Type:      WORKDAY,
+		Timestamp: time.Now(),
+	}
+
+	record1, err := repo.Add(record)
+	suite.Nil(err)
+	suite.True(len(record1.Key) > 0)
+
+	suite.Nil(repo.Delete(record1.Key))
+}
+
 func (suite *S3TestSuite) TestPublishReport() {
 
 	suite.skipCI()

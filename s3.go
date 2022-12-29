@@ -63,18 +63,24 @@ func (repo *S3Repository) Capture(deviceId string, recordType RecordType) error 
 // Captured creates a time tracking record for passed point in time.
 func (repo *S3Repository) Captured(deviceId string, recordType RecordType, timestamp time.Time) error {
 
-	timeTrackingRecord := TimeTrackingRecord{DeviceId: deviceId, Type: recordType, Timestamp: timestamp.UTC()}
-	content, _ := json.Marshal(timeTrackingRecord)
+	timeTrackingRecord := TimeTrackingRecord{
+		DeviceId:  deviceId,
+		Type:      recordType,
+		Timestamp: timestamp.UTC(),
+	}
 	objectPath := repo.newS3ObjectPath(deviceId, timeTrackingRecord.Timestamp)
+	timeTrackingRecord.Key = *objectPath + repo.newRecordId()
+	content, _ := json.Marshal(timeTrackingRecord)
 	uploadInput := &s3manager.UploadInput{
 		Bucket: repo.bucket,
-		Key:    aws.String(*objectPath + repo.newRecordId()),
+		Key:    aws.String(timeTrackingRecord.Key),
 		Body:   bytes.NewReader(content),
 	}
 	_, uploadErr := repo.uploader.Upload(uploadInput)
 	return uploadErr
 }
 
+// ListRecords returns all records captured for given device id and time range.
 func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time.Time) ([]TimeTrackingRecord, error) {
 
 	records := []TimeTrackingRecord{}
@@ -117,9 +123,39 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 		if decodeErr != nil {
 			return records, decodeErr
 		}
+		timeTrackingRecord.Key = *key
 		records = append(records, *timeTrackingRecord)
 	}
 	return records, nil
+}
+
+// Add creates a new time tracking record with given values. Same time tacking record will be
+// returned together with a generated key.
+func (repo *S3Repository) Add(record TimeTrackingRecord) (TimeTrackingRecord, error) {
+
+	objectPath := repo.newS3ObjectPath(record.DeviceId, record.Timestamp)
+	record.Key = *objectPath + repo.newRecordId()
+
+	content, _ := json.Marshal(record)
+	uploadInput := &s3manager.UploadInput{
+		Bucket: repo.bucket,
+		Key:    aws.String(record.Key),
+		Body:   bytes.NewReader(content),
+	}
+	_, err := repo.uploader.Upload(uploadInput)
+	return record, err
+}
+
+// Delete will remove given time tracking record.
+func (repo *S3Repository) Delete(key string) error {
+
+	deleteObjectInput := &s3.DeleteObjectInput{
+		Bucket: repo.bucket,
+		Key:    aws.String(key),
+	}
+
+	_, err := repo.s3.DeleteObject(deleteObjectInput)
+	return err
 }
 
 // NewS3ObjectPath create a S3 object key including passed device id and date.

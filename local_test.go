@@ -66,6 +66,22 @@ func (suite *LocalRepositoryTestSuite) TestListRecords() {
 	suite.Len(records3, 0)
 }
 
+func (suite *LocalRepositoryTestSuite) TestRecordCrudActions() {
+
+	repo := NewLocaLRepository()
+	record := TimeTrackingRecord{
+		DeviceId:  "Device01",
+		Type:      WORKDAY,
+		Timestamp: time.Now(),
+	}
+
+	record1, err := repo.Add(record)
+	suite.Nil(err)
+	suite.True(len(record1.Key) > 0)
+
+	suite.Nil(repo.Delete(record1.Key))
+}
+
 func prepareRecords(repo *LocaLRepository, deviceId string) {
 
 	durations := []time.Duration{
