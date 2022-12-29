@@ -2,6 +2,8 @@ package timetracker
 
 import (
 	"bytes"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/textproto"
@@ -51,6 +53,10 @@ func (publisher *EMailPublisher) Send(content []byte, fileName string) error {
 // RawEMail generates a raw email with given sender/receiver, subject, message and attachment.
 func rawEMail(source, destination, subject, message string, csvFile []byte, attachmentFilename string) (*string, error) {
 
+	if !strings.HasSuffix(attachmentFilename, "xlsx") {
+		return nil, errors.New("Excel (xlsx) supported only atm!")
+	}
+
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
 
@@ -82,16 +88,23 @@ func rawEMail(source, destination, subject, message string, csvFile []byte, atta
 	fn := attachmentFilename
 	h = make(textproto.MIMEHeader)
 	h.Set("Content-Disposition", "attachment; filename="+fn)
-	h.Set("Content-Type", "text/csv; x-unix-mode=0644; name=\""+fn+"\"")
-	h.Set("Content-Transfer-Encoding", "7bit")
+	h.Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; x-unix-mode=0644; name=\""+fn+"\"")
+	h.Set("Content-Transfer-Encoding", "base64")
+	//h.Set("Content-Transfer-Encoding", "7bit")
 	part, err = writer.CreatePart(h)
 	if err != nil {
 		return nil, err
 	}
-	_, err = part.Write(csvFile)
+
+	b := make([]byte, base64.StdEncoding.EncodedLen(len(csvFile)))
+	base64.StdEncoding.Encode(b, csvFile)
+
+	_, err = part.Write(b)
+	//_, err = part.Write(csvFile)
 	if err != nil {
 		return nil, err
 	}
+
 	err = writer.Close()
 	if err != nil {
 		return nil, err
