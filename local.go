@@ -69,6 +69,7 @@ func (repo *LocaLRepository) ListRecords(deviceId string, start time.Time, end t
 // returned together with a generated key.
 func (repo *LocaLRepository) Add(record TimeTrackingRecord) (TimeTrackingRecord, error) {
 
+	record.Timestamp = record.Timestamp.UTC()
 	deviceId := record.DeviceId
 	date := asDate(record.Timestamp)
 	if _, ok := repo.Records[deviceId]; !ok {

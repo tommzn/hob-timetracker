@@ -133,6 +133,7 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 // returned together with a generated key.
 func (repo *S3Repository) Add(record TimeTrackingRecord) (TimeTrackingRecord, error) {
 
+	record.Timestamp = record.Timestamp.UTC()
 	objectPath := repo.newS3ObjectPath(record.DeviceId, record.Timestamp)
 	record.Key = *objectPath + repo.newRecordId()
 
@@ -161,7 +162,8 @@ func (repo *S3Repository) Delete(key string) error {
 // NewS3ObjectPath create a S3 object key including passed device id and date.
 // Will add a path prefix if it has been defined at creating this repository.
 func (repo *S3Repository) newS3ObjectPath(deviceId string, t time.Time) *string {
-	path := fmt.Sprintf("/%s/%04d/%02d/%02d/", deviceId, t.Year(), t.Month(), t.Day())
+	utc := t.UTC()
+	path := fmt.Sprintf("/%s/%04d/%02d/%02d/", deviceId, utc.Year(), utc.Month(), utc.Day())
 	if repo.basePath != nil {
 		path = *repo.basePath + path
 	}
