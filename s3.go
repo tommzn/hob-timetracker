@@ -88,6 +88,9 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 		return records, fmt.Errorf("Invalid range: %s - %s", start, end)
 	}
 
+	start = start.UTC().Round(time.Second)
+	end = end.UTC().Round(time.Second)
+
 	objectKeys := []*string{}
 	listObjectsInput := &s3.ListObjectsInput{
 		Bucket: repo.bucket,
