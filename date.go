@@ -75,3 +75,10 @@ func isDayBeforeOrEqual(t1 time.Time, t2 time.Time) bool {
 func isWeekend(day time.Time) bool {
 	return slices.Contains([]time.Weekday{time.Saturday, time.Sunday}, day.Weekday())
 }
+
+// IsInRange returns true if passed timestamp is greater or quals than start
+// and less or equal as end.
+func isInRange(start, end, timestamp time.Time) bool {
+	return (start.UTC().Before(timestamp.UTC()) || start.UTC().Equal(timestamp.UTC())) &&
+		(end.UTC().After(timestamp.UTC()) || end.UTC().Equal(timestamp.UTC()))
+}

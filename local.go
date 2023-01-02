@@ -25,7 +25,7 @@ func (repo *LocaLRepository) Capture(deviceId string, recordType RecordType) err
 
 // Captured creates a time tracking record for passed point in time.
 func (repo *LocaLRepository) Captured(deviceId string, recordType RecordType, timestamp time.Time) error {
-	timestamp = timestamp.UTC()
+	timestamp = timestamp.UTC().Round(time.Second)
 	date := asDate(timestamp)
 	if _, ok := repo.Records[deviceId]; !ok {
 		repo.Records[deviceId] = make(map[Date][]TimeTrackingRecord)
@@ -47,19 +47,27 @@ func (repo *LocaLRepository) Captured(deviceId string, recordType RecordType, ti
 // ListRecords returns available time tracking records for given range.
 func (repo *LocaLRepository) ListRecords(deviceId string, start time.Time, end time.Time) ([]TimeTrackingRecord, error) {
 
+	start = start.Round(time.Second)
+	end = end.Round(time.Second)
+
 	records := []TimeTrackingRecord{}
 	if end.Before(start) {
 		return records, fmt.Errorf("Invalid range: %s - %s", start, end)
 	}
+
 	if deviceRecords, ok := repo.Records[deviceId]; ok {
-		for isDayBeforeOrEqual(start, end) {
-			if recordsForDay, ok := deviceRecords[asDate(start)]; ok {
+
+		currentDate := start
+		for isDayBeforeOrEqual(currentDate, end) {
+			if recordsForDay, ok := deviceRecords[asDate(currentDate)]; ok {
 				for idx, record := range recordsForDay {
-					record.Key = repo.recordKey(deviceId, start, idx)
-					records = append(records, record)
+					record.Key = repo.recordKey(deviceId, currentDate, idx)
+					if isInRange(start, end, record.Timestamp) {
+						records = append(records, record)
+					}
 				}
 			}
-			start = nextDay(start)
+			currentDate = nextDay(currentDate)
 		}
 	}
 	return records, nil
@@ -69,7 +77,7 @@ func (repo *LocaLRepository) ListRecords(deviceId string, start time.Time, end t
 // returned together with a generated key.
 func (repo *LocaLRepository) Add(record TimeTrackingRecord) (TimeTrackingRecord, error) {
 
-	record.Timestamp = record.Timestamp.UTC()
+	record.Timestamp = record.Timestamp.UTC().Round(time.Second)
 	deviceId := record.DeviceId
 	date := asDate(record.Timestamp)
 	if _, ok := repo.Records[deviceId]; !ok {

@@ -55,7 +55,7 @@ func (suite *LocalRepositoryTestSuite) TestListRecords() {
 
 	records, err := repo.ListRecords(deviceId, time.Now(), time.Now().Add(3*24*time.Hour))
 	suite.Nil(err)
-	suite.Len(records, 12)
+	suite.Len(records, 10)
 
 	records2, err2 := repo.ListRecords(deviceId, time.Now().Add(5*24*time.Hour), time.Now().Add(5*24*time.Hour))
 	suite.Nil(err2)
@@ -88,13 +88,13 @@ func prepareRecords(repo *LocaLRepository, deviceId string) {
 		time.Duration(0),
 		1 * time.Minute,
 		60 * time.Minute,
-		24*time.Hour + time.Duration(0),
+		24 * time.Hour,
 		24*time.Hour + 1*time.Minute,
 		24*time.Hour + 60*time.Minute,
-		2*24*time.Hour + time.Duration(0),
+		2 * 24 * time.Hour,
 		2*24*time.Hour + 1*time.Minute,
 		2*24*time.Hour + 60*time.Minute,
-		3*24*time.Hour + time.Duration(0),
+		3 * 24 * time.Hour,
 		3*24*time.Hour + 1*time.Minute,
 		3*24*time.Hour + 60*time.Minute,
 		4 * 24 * time.Hour,

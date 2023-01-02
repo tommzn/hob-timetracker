@@ -66,7 +66,7 @@ func (repo *S3Repository) Captured(deviceId string, recordType RecordType, times
 	timeTrackingRecord := TimeTrackingRecord{
 		DeviceId:  deviceId,
 		Type:      recordType,
-		Timestamp: timestamp.UTC(),
+		Timestamp: timestamp.UTC().Round(time.Second),
 	}
 	objectPath := repo.newS3ObjectPath(deviceId, timeTrackingRecord.Timestamp)
 	timeTrackingRecord.Key = *objectPath + repo.newRecordId()
@@ -92,9 +92,11 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 	listObjectsInput := &s3.ListObjectsInput{
 		Bucket: repo.bucket,
 	}
-	for isDayBeforeOrEqual(start, end) {
 
-		listObjectsInput.Prefix = repo.newS3ObjectPath(deviceId, start)
+	currentDate := start
+	for isDayBeforeOrEqual(currentDate, end) {
+
+		listObjectsInput.Prefix = repo.newS3ObjectPath(deviceId, currentDate)
 		listObjectsOutput, err := repo.s3.ListObjects(listObjectsInput)
 		if err != nil {
 			return records, err
@@ -102,7 +104,7 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 		for _, s3object := range listObjectsOutput.Contents {
 			objectKeys = append(objectKeys, s3object.Key)
 		}
-		start = nextDay(start)
+		currentDate = nextDay(currentDate)
 	}
 
 	for _, key := range objectKeys {
@@ -124,7 +126,10 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 			return records, decodeErr
 		}
 		timeTrackingRecord.Key = *key
-		records = append(records, *timeTrackingRecord)
+		if isInRange(start, end, timeTrackingRecord.Timestamp) {
+			records = append(records, *timeTrackingRecord)
+		}
+
 	}
 	return records, nil
 }
@@ -133,7 +138,7 @@ func (repo *S3Repository) ListRecords(deviceId string, start time.Time, end time
 // returned together with a generated key.
 func (repo *S3Repository) Add(record TimeTrackingRecord) (TimeTrackingRecord, error) {
 
-	record.Timestamp = record.Timestamp.UTC()
+	record.Timestamp = record.Timestamp.UTC().Round(time.Second)
 	objectPath := repo.newS3ObjectPath(record.DeviceId, record.Timestamp)
 	record.Key = *objectPath + repo.newRecordId()
 
