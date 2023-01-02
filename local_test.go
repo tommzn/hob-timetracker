@@ -64,6 +64,13 @@ func (suite *LocalRepositoryTestSuite) TestListRecords() {
 	records3, err3 := repo.ListRecords(deviceId, time.Now().Add(2*24*time.Hour), time.Now())
 	suite.NotNil(err3)
 	suite.Len(records3, 0)
+
+	start := time.Now()
+	start = time.Date(start.Year(), start.Month(), start.Day(), 0, 0, 0, 0, start.Location())
+	end := start.AddDate(0, 0, 1).Add(-1 * time.Second)
+	records4, err4 := repo.ListRecords(deviceId, start, end)
+	suite.Nil(err4)
+	suite.Len(records4, 3)
 }
 
 func (suite *LocalRepositoryTestSuite) TestRecordCrudActions() {

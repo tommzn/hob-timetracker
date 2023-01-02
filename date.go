@@ -61,14 +61,12 @@ func asDate(t time.Time) Date {
 
 // NextDay increases given date by one day.
 func nextDay(day time.Time) time.Time {
-	return day.AddDate(0, 0, 1)
+	return time.Date(day.Year(), day.Month(), day.Day(), 0, 0, 0, 0, day.Location()).AddDate(0, 0, 1)
 }
 
 // IsDayBeforeOrEqual returns with true if first date is less or equal than second date.
 func isDayBeforeOrEqual(t1 time.Time, t2 time.Time) bool {
-	m1 := time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, time.UTC)
-	m2 := time.Date(t2.Year(), t2.Month(), t2.Day(), 0, 0, 0, 0, time.UTC)
-	return m1.Before(m2) || m1.Equal(m2)
+	return t1.Unix() <= t2.Unix()
 }
 
 // IsWeekend returns true if passed weekday is Saturday or Sunday.

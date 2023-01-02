@@ -47,19 +47,19 @@ func (repo *LocaLRepository) Captured(deviceId string, recordType RecordType, ti
 // ListRecords returns available time tracking records for given range.
 func (repo *LocaLRepository) ListRecords(deviceId string, start time.Time, end time.Time) ([]TimeTrackingRecord, error) {
 
-	start = start.Round(time.Second)
-	end = end.Round(time.Second)
-
 	records := []TimeTrackingRecord{}
 	if end.Before(start) {
 		return records, fmt.Errorf("Invalid range: %s - %s", start, end)
 	}
 
+	start = start.UTC().Round(time.Second)
+	end = end.UTC().Round(time.Second)
 	if deviceRecords, ok := repo.Records[deviceId]; ok {
 
 		currentDate := start
 		for isDayBeforeOrEqual(currentDate, end) {
 			if recordsForDay, ok := deviceRecords[asDate(currentDate)]; ok {
+
 				for idx, record := range recordsForDay {
 					record.Key = repo.recordKey(deviceId, currentDate, idx)
 					if isInRange(start, end, record.Timestamp) {

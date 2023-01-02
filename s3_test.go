@@ -40,7 +40,10 @@ func (suite *S3TestSuite) TestListRecords() {
 	deviceId := deviceIdForTest()
 
 	suite.Nil(repo.Capture(deviceId, WORKDAY))
-	records, err := repo.ListRecords(deviceId, time.Now(), time.Now().Add(1*time.Second))
+	start := time.Now()
+	start = time.Date(start.Year(), start.Month(), start.Day(), 0, 0, 0, 0, start.Location())
+	end := start.AddDate(0, 0, 1).Add(-1 * time.Second)
+	records, err := repo.ListRecords(deviceId, start, end)
 	suite.Nil(err)
 	suite.True(len(records) >= 1)
 
