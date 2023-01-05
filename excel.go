@@ -136,7 +136,9 @@ func (formatter *ExcelReportFormatter) createStyles(xls *excelize.File) error {
 	var err error
 	formatter.headlineStyleId, err = xls.NewStyle(&excelize.Style{
 		Border: []excelize.Border{
-			{Type: "bottom", Color: "000000", Style: 5},
+			{Type: "bottom", Color: "000000", Style: 2},
+			{Type: "left", Color: "FFFFFF", Style: 0},
+			{Type: "right", Color: "FFFFFF", Style: 0},
 		},
 		Font: &excelize.Font{
 			Bold: true,
@@ -147,7 +149,9 @@ func (formatter *ExcelReportFormatter) createStyles(xls *excelize.File) error {
 	}
 	formatter.daysBottomStyleId, err = xls.NewStyle(&excelize.Style{
 		Border: []excelize.Border{
-			{Type: "bottom", Color: "000000", Style: 5},
+			{Type: "bottom", Color: "000000", Style: 2},
+			{Type: "left", Color: "FFFFFF", Style: 0},
+			{Type: "right", Color: "FFFFFF", Style: 0},
 		},
 	})
 	if err != nil {
