@@ -33,6 +33,11 @@ func (d Date) Before(d2 Date) bool {
 	return d.Year*10000+d.Month*100+d.Day < d2.Year*10000+d2.Month*100+d2.Day
 }
 
+// Equal returns true if passed date is equal to current.
+func (d Date) Equal(d2 Date) bool {
+	return d.Year*10000+d.Month*100+d.Day == d2.Year*10000+d2.Month*100+d2.Day
+}
+
 // String returns current date formatted with YYYY-MM-DD/2006-01-02.
 func (d Date) String() string {
 	return d.Format("2006-01-02")
@@ -79,4 +84,9 @@ func isWeekend(day time.Time) bool {
 func isInRange(start, end, timestamp time.Time) bool {
 	return (start.UTC().Before(timestamp.UTC()) || start.UTC().Equal(timestamp.UTC())) &&
 		(end.UTC().After(timestamp.UTC()) || end.UTC().Equal(timestamp.UTC()))
+}
+
+// LastDayOfMonth returns last day in month of given date.
+func lastDayOfMonth(date Date) Date {
+	return asDate(time.Date(date.Year, time.Month(date.Month), 1, 0, 0, 0, 0, time.UTC).AddDate(0, 1, 0).Add(-1 * time.Second))
 }
