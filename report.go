@@ -204,7 +204,6 @@ func fillToEndOfMonth(days []Day) []Day {
 		lastDayInList.Equal(lastDayOfMonth) {
 		return days
 	}
-
 	daysToFill := generateDays(lastDayInList.Date.AsTime(), lastDayOfMonth, lastDayInList.Type)
 	daysToFill = append(daysToFill, Day{Date: lastDayOfMonth, Type: lastDayInList.Type, WorkingTime: 0, BreakTime: 0})
 	return append(days, daysToFill...)
