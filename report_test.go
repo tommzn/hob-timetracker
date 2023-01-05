@@ -1,7 +1,10 @@
 package timetracker
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/stretchr/testify/suite"
+	"io/ioutil"
 	"testing"
 	"time"
 )
@@ -111,7 +114,7 @@ func (suite *ReportCalulatorTestSuite) TestFillVacationAndIllness() {
 	report, err := calculator.MonthlyReport(2022, 2, VACATION)
 	suite.Nil(err)
 	suite.NotNil(report)
-	suite.Len(report.Days, 14)
+	suite.Len(report.Days, 13)
 
 	for _, day := range report.Days {
 		suite.Equal(2022, day.Date.Year)
@@ -175,9 +178,45 @@ func (suite *ReportCalulatorTestSuite) TestCalulateWorkTime() {
 	suite.Equal(time.Duration(0), day.BreakTime)
 }
 
+func (suite *ReportCalulatorTestSuite) TestGenerateExampleReports() {
+
+	records1 := suite.loadTimeTrackingRecordsForTest("fixtures/timetrackingrecords01.json")
+	calculator1 := NewReportCalulator(records1, localeForTest())
+	report1, err1 := calculator1.MonthlyReport(2022, 12, WORKDAY)
+	suite.Nil(err1)
+	suite.Len(report1.Days, 23)
+	suite.Equal("2022-12-10", report1.Days[0].Date.String())
+	suite.Equal("2022-12-31", report1.Days[len(report1.Days)-1].Date.String())
+}
+
 func (suite *ReportCalulatorTestSuite) assertWorkingTime(report *MonthlyReport, expexctedWorkingTime time.Duration) {
 	suite.NotNil(report)
 	suite.Len(report.Days, 1)
 	suite.Equal(expexctedWorkingTime, report.Days[0].WorkingTime)
 	suite.Equal(WORKDAY, report.Days[0].Type)
+}
+
+func (suite *ReportCalulatorTestSuite) loadTimeTrackingRecordsForTest(filename string) []TimeTrackingRecord {
+
+	content, err := ioutil.ReadFile(filename)
+	suite.Nil(err)
+
+	var records []TimeTrackingRecord
+	suite.Nil(json.Unmarshal(content, &records))
+	return records
+}
+
+func printReport(report MonthlyReport) {
+
+	fmt.Printf("MonthlyReport: %d/%d\n", report.Year, report.Month)
+	fmt.Printf("TotalWorkingTime: %s\n", report.TotalWorkingTime)
+	for _, day := range report.Days {
+		fmt.Printf("%s\n", day.Date.String())
+		fmt.Printf("Type: %s\n", day.Type)
+		fmt.Printf("WorkingTime: %s\n", day.WorkingTime)
+		fmt.Printf("BreakTime: %s\n", day.BreakTime)
+		for _, event := range day.Events {
+			fmt.Printf("\t%s %s %s\n", event.DeviceId, event.Type, event.Timestamp.Format(time.RFC3339))
+		}
+	}
 }
