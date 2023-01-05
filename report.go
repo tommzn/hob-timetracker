@@ -198,6 +198,10 @@ func generateDays(startDay time.Time, endDay Date, recordType RecordType) []Day 
 // FillToEndOfMonth loop from last day in given list until end of month and fill vacation or illness days if required.
 func fillToEndOfMonth(days []Day) []Day {
 
+	if len(days) == 0 {
+		return days
+	}
+
 	lastDayInList := days[len(days)-1]
 	lastDayOfMonth := lastDayOfMonth(lastDayInList.Date)
 	if (lastDayInList.Type != ILLNESS && lastDayInList.Type != VACATION) ||
