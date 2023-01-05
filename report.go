@@ -167,6 +167,7 @@ func fillVacationAndIllness(report *MonthlyReport, latestType RecordType) {
 
 	sort.Slice(report.Days, func(i, j int) bool { return report.Days[i].Date.Before(report.Days[j].Date) })
 	dayOfMonth := time.Date(report.Year, time.Month(report.Month), 1, 0, 0, 0, 0, time.UTC)
+
 	days := []Day{}
 	for _, day := range report.Days {
 
@@ -174,14 +175,14 @@ func fillVacationAndIllness(report *MonthlyReport, latestType RecordType) {
 			(latestType == ILLNESS || latestType == VACATION) {
 			daysToFill := generateDays(dayOfMonth, day.Date, latestType)
 			days = append(days, daysToFill...)
-			dayOfMonth = time.Date(dayOfMonth.Year(), dayOfMonth.Month(), day.Date.Day, 0, 0, 0, 0, time.UTC)
 		} else {
 			latestType = day.Type
 		}
+		dayOfMonth = time.Date(dayOfMonth.Year(), dayOfMonth.Month(), day.Date.Day, 0, 0, 0, 0, time.UTC)
 		days = append(days, day)
 		dayOfMonth = dayOfMonth.AddDate(0, 0, 1)
 	}
-	report.Days = days
+	report.Days = fillToEndOfMonth(days)
 }
 
 // GenerateDays will create a list of empty days in given range and assign passed type to all of them.
@@ -192,4 +193,19 @@ func generateDays(startDay time.Time, endDay Date, recordType RecordType) []Day 
 		startDay = startDay.AddDate(0, 0, 1)
 	}
 	return days
+}
+
+// FillToEndOfMonth loop from last day in given list until end of month and fill vacation or illness days if required.
+func fillToEndOfMonth(days []Day) []Day {
+
+	lastDayInList := days[len(days)-1]
+	lastDayOfMonth := lastDayOfMonth(lastDayInList.Date)
+	if (lastDayInList.Type != ILLNESS && lastDayInList.Type != VACATION) ||
+		lastDayInList.Equal(lastDayOfMonth) {
+		return days
+	}
+
+	daysToFill := generateDays(lastDayInList.Date.AsTime(), lastDayOfMonth, lastDayInList.Type)
+	daysToFill = append(daysToFill, Day{Date: lastDayOfMonth, Type: lastDayInList.Type, WorkingTime: 0, BreakTime: 0})
+	return append(days, daysToFill...)
 }

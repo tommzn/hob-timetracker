@@ -1,0 +1,146 @@
+[
+    {
+        "DeviceId": "Device01",
+        "Type": "vacation",
+        "Timestamp": "2022-12-10T10:30:54.653Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-10T10:09:45.647Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-10T10:20:22.047Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-10T10:29:23.419Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-10T10:28:19.595Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-10T10:16:08.275Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "illness",
+        "Timestamp": "2022-12-10T10:28:44.78Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-12T15:11:24.388Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-12T06:17:50.673Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-13T06:29:51.118Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-14T06:20:10.179Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-14T15:36:05.504Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "illness",
+        "Timestamp": "2022-12-15T06:34:40Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-19T15:10:39.719Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-19T06:23:14.161Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-20T06:26:25.534Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-20T15:16:12.686Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-21T15:40:37.369Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-21T06:25:40.408Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-22T16:04:36.856Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-22T08:27:20.156Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-23T06:07:00.032Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "workday",
+        "Timestamp": "2022-12-23T15:18:17.019Z",
+        "Estimated": false
+    },
+    {
+        "DeviceId": "Device01",
+        "Type": "vacation",
+        "Timestamp": "2022-12-24T09:29:38.973Z",
+        "Estimated": false
+    }
+]
