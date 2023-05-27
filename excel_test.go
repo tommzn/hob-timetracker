@@ -17,7 +17,7 @@ func TestExcelReportFormatterTestSuitee(t *testing.T) {
 
 func (suite *ExcelReportFormatterTestSuite) TestGenerateReport() {
 
-	formatter := NewExcelReportFormatter()
+	formatter := NewExcelReportFormatter(loggerForTest())
 	report := monthlyReportForTest()
 
 	suite.withHolidays(formatter, report.Year, report.Month)
