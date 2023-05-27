@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"time"
 
+	log "github.com/tommzn/go-log"
 	"github.com/xuri/excelize/v2"
 )
 
 // NewExcelReportFormatter returns a new formatter to generate an excel file for a report.
-func NewExcelReportFormatter() *ExcelReportFormatter {
+func NewExcelReportFormatter(logger log.Logger) *ExcelReportFormatter {
 	return &ExcelReportFormatter{
 		dateFormat: "2006-01-02",
 		timeFormat: "15:04",
+		logger:     logger,
 	}
 }
 
@@ -56,6 +58,8 @@ type ExcelReportFormatter struct {
 	// VacationStyleId, style for days of vacations.
 	// Green background
 	vacationStyleId int
+
+	logger log.Logger
 }
 
 // FileExtension reurns file extension for Exce files: xlsx.
@@ -273,10 +277,15 @@ func (formatter *ExcelReportFormatter) determineDateFormat(report *MonthlyReport
 
 // DetermineTimezone will assign a timezone to a formatter it it has been defined in report local.
 func (formatter *ExcelReportFormatter) determineTimezone(report *MonthlyReport) {
+
+	formatter.logger.Debug("Report timezone: ", report.Location.Timezone)
 	if report.Location.Timezone != nil {
 		if location, err := time.LoadLocation(*report.Location.Timezone); err == nil {
+			formatter.logger.Debugf("Time location: %+v", location)
 			formatter.timezone = location
 			return
+		} else {
+			formatter.logger.Error("Unable to load location, reason: ", err)
 		}
 	}
 	formatter.timezone = nil
